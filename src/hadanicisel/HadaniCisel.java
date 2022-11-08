@@ -9,69 +9,153 @@ package hadanicisel;
  * @author ondrej.donat
  */
 import java.util.Scanner;
+
 public class HadaniCisel {
     static int minValue = 1;
     static int maxValue = 100;
+    static int pocetHer = 1;
     static boolean end = false;
-    static Scanner sc = new Scanner(System.in);
-    public static void main(String[] args) {
-        int choice;
-        
-               
+    static boolean zpet = false;      
+    static Scanner sc = new Scanner(System.in);   
+    public static void main(String[] args) { //program pro hlavní menu
+        int choice;                     
         do{
             displayMenu();
             choice = sc.nextInt();
-
+            
             switch(choice){
-                case 1: computerGuesses(); break;
-                case 2: userGuesses(); break;
-                case 0: end = true; break;
-                default: System.out.println("Neplatna Volba");
+                case 1: user1Guesses();break; 
+                case 2: user2Guesses();break; 
+                case 3: nastaveni();break;
+                case 0: end = true; break;                                                    
             }       
         }while(!end); //end == false
     }
     
-    private static void displayMenu(){
-       System.out.println("Vitej ve hre!");
-       System.out.println("Zadej volbu");
-       System.out.println("1. Hada pocitac");
-       System.out.println("2. Hada uzivatel");
+    private static void displayMenu(){ //hlavní menu
+       System.out.println("Vitej ve hre!");     
+       System.out.println("1. Hrac 1");
+       System.out.println("2. Hrac 2");
+       System.out.println("3. Nastaveni");
+       System.out.println("Rozsah hledaneho cisla je od " + minValue + " do " + maxValue +", Pocet her je "+pocetHer+". Pro zmenu volby prejdete do nastaveni.");
        System.out.println("0. Konec hry");
     } 
 
-    private static void computerGuesses() {
-        System.out.println("Tady bude varianta hada pocitac");
-        int min;
-        int max;       
-        int guess;
-        int answer;
-        System.out.println("Uzivateli, mysli si cislo " + "v rozsahu " + minValue + " do " + maxValue);
-        min = minValue;
-        max = maxValue;
-        do{
-        guess = (min+max)/2;
-        System.out.println("uzivateli,mysli si cislo " + guess + "?");
-        System.out.println("Odpovez: -1 pro mensi, 1 pro vetsi, 0 trefa");
-        answer = sc.nextInt();
-        
-        if (answer == -1){
-            max = guess-1;
-            }
-        else if(answer == 1){
-            min = guess +1;
-        }
-        else{ System.out.println("trefa");
-        end = true;
-        }
-    }while(!end);
-}
-    private static void userGuesses() {
-        System.out.println("Tady bude varianta hada uzivatel");
+    private static void user1Guesses() {
+        System.out.println("Hraje hrac 1");
+        if(minValue>maxValue){
+            int a = maxValue;
+            maxValue = minValue;
+            minValue = a;                   
+        } 
+        int max = maxValue;
+        int min = minValue;
+        int pocetPokusu = 1;
+        int i = 0;
+        while(i<pocetHer){
+            int hra = i+1;
+            int tip = (max+min)/2;
+            System.out.println(hra+". hra");
+            System.out.println("pokus: "+pocetPokusu+".");          
+            System.out.print("pocitac ti vybral nejvhodnejsi tip: "+tip +" Zde napis svuj tip: ");
+            int cislo = sc.nextInt();
+            System.out.println();
+            System.out.println("s - smaller, b - bigger, f - found, e - exit");           
+            char odpoved; 
+            odpoved = sc.next().charAt(0);
+            //odpovedi uzivatele
+            if(odpoved == 'b'){
+            min = cislo;                                        
+            }else if(odpoved == 's'){
+            max = cislo;    
+            }else if(odpoved == 'f'){
+                System.out.println("Gratuluju! Nasel jsi cislo na "+pocetPokusu+". pokus"); 
+                i++;
+            }else if(odpoved == 'e'){
+            break;
+            }  
+            pocetPokusu++;
+        }        
+    }   
+    
+    private static void user2Guesses() { 
+        System.out.println("Hraje hrac 2");
+        if(minValue>maxValue){
+            int a = maxValue;
+            maxValue = minValue;
+            minValue = a;                   
+        } 
+        int max = maxValue;
+        int min = minValue;
+        int pocetPokusu = 1;
+        int i = 0;
+        while(i<pocetHer){
+            int hra = i+1;
+            int tip = (max+min)/2;
+            System.out.println(hra+". hra");
+            System.out.println("pokus: "+pocetPokusu+".");          
+            System.out.print("pocitac ti vybral nejvhodnejsi tip: "+tip +" Zde napis svuj tip: ");
+            int cislo = sc.nextInt();
+            System.out.println();
+            System.out.println("s - smaller, b - bigger, f - found, e - exit");           
+            char odpoved; 
+            odpoved = sc.next().charAt(0);
+            //odpovedi uzivatele
+            if(odpoved == 'b'){
+            min = cislo;                                        
+            }else if(odpoved == 's'){
+            max = cislo;    
+            }else if(odpoved == 'f'){
+                System.out.println("Gratuluju! Nasel jsi cislo na "+pocetPokusu+". pokus"); 
+                i++;
+            }else if(odpoved == 'e'){
+            break;
+            }  
+            pocetPokusu++;
+        }                     
     }
-
-    private static boolean end() {
-      
+    
+    private static void nastaveni() { //program pro menu nastavení
+        int choice2;
+        zpet = false;
+        do{
+            displayMenu2();
+            choice2 = sc.nextInt();
+            
+            //prohozeni min a max hodnot
+            if(minValue > maxValue){
+            int min = minValue;
+            minValue = maxValue;
+            maxValue = min;                                 
+            } 
+            if(pocetHer<=0){
+            pocetHer=1;
+            }  
+            
+            switch(choice2){
+                case 1: 
+                minValue = sc.nextInt();break;   
+                case 2: 
+                maxValue = sc.nextInt();break;
+                case 3:
+                pocetHer = sc.nextInt();break; 
+                case 0: zpet = true;                                                      
+            }       
+        }while(!zpet); //end == false                           
+    }
+    
+    private static void displayMenu2() { //menu pro nastaveni
+       System.out.println("Nastavení");     
+       System.out.println("1. Minimum hledaného čísla: "+minValue);
+       System.out.println("2. Maximum hledaného čísla: "+maxValue);
+       System.out.println("3. Pocet her: "+pocetHer);
+       System.out.println("0. Zpět");
+    }
+    
+    private static boolean end() {  //konec hry 
         return false;
     }
 }
+    
 
+  
